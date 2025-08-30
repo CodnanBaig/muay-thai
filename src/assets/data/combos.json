@@ -1,0 +1,152 @@
+[
+  {
+    "id": "jab-cross",
+    "name": "Jab-Cross",
+    "category": "Punches",
+    "difficulty": "Beginner",
+    "instructions": [
+      "Start in orthodox stance with left foot forward",
+      "Throw a quick jab with your left hand",
+      "Immediately follow with a cross (straight right)",
+      "Keep your guard up and return to stance",
+      "Focus on speed and accuracy"
+    ],
+    "gifFileName": "jab-cross.gif",
+    "tips": [
+      "Keep your chin down and eyes up",
+      "Rotate your hips for more power",
+      "Don't drop your hands after punching"
+    ],
+    "commonMistakes": [
+      "Telegraphing the punch",
+      "Dropping guard after punching",
+      "Not rotating hips properly"
+    ],
+    "nextCombos": ["jab-cross-hook", "jab-cross-teep"]
+  },
+  {
+    "id": "teep",
+    "name": "Teep (Push Kick)",
+    "category": "Kicks",
+    "difficulty": "Beginner", 
+    "instructions": [
+      "Lift your knee straight up towards your chest",
+      "Extend your leg straight out",
+      "Strike with the ball of your foot",
+      "Push through the target",
+      "Return leg quickly to starting position"
+    ],
+    "gifFileName": "teep.gif",
+    "tips": [
+      "Keep your balance on the standing leg",
+      "Use your hands for balance",
+      "Aim for the solar plexus or stomach"
+    ],
+    "commonMistakes": [
+      "Leaning too far forward",
+      "Not lifting knee high enough",
+      "Striking with toes instead of ball of foot"
+    ],
+    "nextCombos": ["jab-cross-teep", "teep-roundhouse"]
+  },
+  {
+    "id": "roundhouse-kick",
+    "name": "Roundhouse Kick",
+    "category": "Kicks",
+    "difficulty": "Intermediate",
+    "instructions": [
+      "Pivot on your standing foot",
+      "Lift your knee up and across your body",
+      "Snap your shin through the target",
+      "Strike with your shin, not your foot",
+      "Follow through and return to stance"
+    ],
+    "gifFileName": "roundhouse.gif",
+    "tips": [
+      "Turn your hip over completely", 
+      "Keep your hands up for balance",
+      "Aim for the thigh, body, or head"
+    ],
+    "commonMistakes": [
+      "Not pivoting the standing foot",
+      "Striking with the foot instead of shin",
+      "Poor balance and falling forward"
+    ],
+    "nextCombos": ["teep-roundhouse", "jab-roundhouse"]
+  },
+  {
+    "id": "elbow-strike",
+    "name": "Horizontal Elbow",
+    "category": "Elbows",
+    "difficulty": "Intermediate",
+    "instructions": [
+      "Bring your elbow across your body horizontally",
+      "Keep your fist close to your ear",
+      "Strike with the sharp point of your elbow",
+      "Rotate your body for maximum power",
+      "Keep opposite hand up for defense"
+    ],
+    "gifFileName": "elbow.gif",
+    "tips": [
+      "Keep the elbow strike tight and compact",
+      "Use your whole body rotation",
+      "Target the jaw, temple, or ribs"
+    ],
+    "commonMistakes": [
+      "Swinging the elbow too wide",
+      "Not using body rotation",
+      "Dropping the opposite hand"
+    ],
+    "nextCombos": ["jab-elbow", "elbow-knee"]
+  },
+  {
+    "id": "knee-strike",
+    "name": "Straight Knee",
+    "category": "Knees",
+    "difficulty": "Intermediate",
+    "instructions": [
+      "Drive your knee straight up",
+      "Keep your shin vertical",
+      "Strike with the top of your knee cap",
+      "Pull your opponent down while kneeing up",
+      "Keep your balance on the standing leg"
+    ],
+    "gifFileName": "knee.gif",
+    "tips": [
+      "Keep your core tight",
+      "Drive through the target",
+      "Use your arms to control distance"
+    ],
+    "commonMistakes": [
+      "Leaning too far back",
+      "Not driving knee high enough",
+      "Poor balance on standing leg"
+    ],
+    "nextCombos": ["elbow-knee", "knee-roundhouse"]
+  },
+  {
+    "id": "jab-cross-hook",
+    "name": "Jab-Cross-Hook",
+    "category": "Combos",
+    "difficulty": "Advanced",
+    "instructions": [
+      "Start with jab-cross combo",
+      "After the cross, throw a left hook",
+      "Keep your elbow parallel to the floor",
+      "Rotate your body into the hook",
+      "Return to guard position"
+    ],
+    "gifFileName": "jab-cross-hook.gif",
+    "tips": [
+      "Flow smoothly between punches",
+      "Keep constant pressure forward",
+      "Mix up timing and power"
+    ],
+    "commonMistakes": [
+      "Rushing the combination",
+      "Telegraphing the hook",
+      "Poor footwork between punches"
+    ],
+    "nextCombos": ["jab-cross-hook-teep"]
+  }
+]
