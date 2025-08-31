@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { HomeScreenProps } from '../types';
+import { router } from 'expo-router';
 import { Button, Card, LoadingSpinner } from '../components/common';
 import { useProgress } from '../context';
 import { colors, typography, spacing, APP_CONFIG } from '../utils/constants';
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+export const HomeScreen: React.FC = () => {
   const { userProgress, isLoading, getMotivationalMessage } = useProgress();
   const [motivationalMessage, setMotivationalMessage] = useState(APP_CONFIG.TAGLINE);
 
@@ -23,8 +23,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     }
   };
 
-  const navigateToSection = (section: 'Combos' | 'Timer' | 'Progress') => {
-    navigation.navigate(section);
+  const navigateToSection = (section: 'combos' | 'timer' | 'progress') => {
+    router.push(`/(tabs)/${section}`);
   };
 
   if (isLoading) {
@@ -82,7 +82,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               </View>
               <Button
                 title="Explore Combos"
-                onPress={() => navigateToSection('Combos')}
+                onPress={() => navigateToSection('combos')}
                 size="medium"
               />
             </View>
@@ -101,7 +101,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               </View>
               <Button
                 title="Start Timer"
-                onPress={() => navigateToSection('Timer')}
+                onPress={() => navigateToSection('timer')}
                 size="medium"
               />
             </View>
@@ -120,7 +120,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               </View>
               <Button
                 title="View Progress"
-                onPress={() => navigateToSection('Progress')}
+                onPress={() => navigateToSection('progress')}
                 size="medium"
               />
             </View>
@@ -139,12 +139,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <View style={styles.quickActionButtons}>
               <Button
                 title="First Combo"
-                onPress={() => navigateToSection('Combos')}
+                onPress={() => navigateToSection('combos')}
                 style={styles.quickActionButton}
               />
               <Button
                 title="Quick Session"
-                onPress={() => navigateToSection('Timer')}
+                onPress={() => navigateToSection('timer')}
                 variant="secondary"
                 style={styles.quickActionButton}
               />
