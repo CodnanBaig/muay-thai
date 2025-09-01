@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { colors, typography, spacing } from '../../utils/constants';
 
 interface GifPlayerProps {
   gifPath: string;
   comboName: string;
+  category?: string;
   isPlaying?: boolean;
   onPlayStateChange?: (isPlaying: boolean) => void;
 }
@@ -12,10 +13,12 @@ interface GifPlayerProps {
 export const GifPlayer: React.FC<GifPlayerProps> = ({
   gifPath,
   comboName,
+  category = '',
   isPlaying = true,
   onPlayStateChange
 }) => {
   const [playing, setPlaying] = useState(isPlaying);
+  const [imageError, setImageError] = useState(false);
 
   const togglePlayback = () => {
     const newPlayingState = !playing;
@@ -23,27 +26,66 @@ export const GifPlayer: React.FC<GifPlayerProps> = ({
     onPlayStateChange?.(newPlayingState);
   };
 
-  // Note: In a real app, you would use react-native-fast-image or similar
-  // For the MVP, we'll show a placeholder with controls
+  // For demo purposes, we'll create a mapping of combo techniques to placeholder images
+  const getPlaceholderImage = (comboName: string, category: string = '') => {
+    // Extract category from combo props if available, or determine from combo name
+    const lowerName = comboName.toLowerCase();
+    
+    // Category-based placeholder selection
+    if (category === 'Punches' || lowerName.includes('jab') || lowerName.includes('cross') || lowerName.includes('hook')) {
+      return require('../../../assets/images/react-logo.png'); // Punches
+    }
+    if (category === 'Kicks' || lowerName.includes('kick') || lowerName.includes('teep') || lowerName.includes('roundhouse')) {
+      return require('../../../assets/images/react-logo@2x.png'); // Kicks
+    }
+    if (category === 'Elbows' || lowerName.includes('elbow')) {
+      return require('../../../assets/images/react-logo@3x.png'); // Elbows
+    }
+    if (category === 'Knees' || lowerName.includes('knee')) {
+      return require('../../../assets/images/icon.png'); // Knees
+    }
+    if (category === 'Combos' || lowerName.includes('combo')) {
+      return require('../../../assets/images/adaptive-icon.png'); // Combos
+    }
+    
+    // Default fallback
+    return require('../../../assets/images/react-logo.png');
+  };
+
+  const renderContent = () => {
+    // Try to load the actual image first, fallback to placeholder
+    if (!imageError && gifPath && gifPath !== '') {
+      return (
+        <Image
+          source={{ uri: gifPath }}
+          style={styles.gif}
+          onError={() => setImageError(true)}
+          resizeMode="contain"
+        />
+      );
+    }
+    
+    // Fallback to a placeholder image or generated placeholder
+    return (
+      <View style={styles.placeholder}>
+        <Image
+          source={getPlaceholderImage(comboName, category)}
+          style={styles.placeholderImage}
+          resizeMode="contain"
+        />
+        <Text style={styles.placeholderText}>
+          {comboName}
+        </Text>
+        <Text style={styles.placeholderSubtext}>
+          Training Technique
+        </Text>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.gifContainer}>
-        <View style={styles.placeholder}>
-          <Text style={styles.placeholderEmoji}>🥊</Text>
-          <Text style={styles.placeholderText}>
-            {comboName}
-          </Text>
-          <Text style={styles.placeholderSubtext}>
-            GIF Animation
-          </Text>
-          {/* In production, replace with:
-              <FastImage 
-                source={{ uri: gifPath }}
-                style={styles.gif}
-                resizeMode={FastImage.resizeMode.contain}
-              />
-          */}
-        </View>
+        {renderContent()}
         
         <TouchableOpacity
           style={styles.playButton}
@@ -93,15 +135,22 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
     backgroundColor: colors.background,
   },
+  gif: {
+    width: '100%',
+    height: '100%',
+  },
   placeholder: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
+    padding: spacing.lg,
   },
-  placeholderEmoji: {
-    fontSize: 48,
+  placeholderImage: {
+    width: 80,
+    height: 80,
     marginBottom: spacing.md,
+    opacity: 0.6,
   },
   placeholderText: {
     ...typography.h3,
@@ -112,6 +161,7 @@ const styles = StyleSheet.create({
   placeholderSubtext: {
     ...typography.caption,
     color: colors.textSecondary,
+    textAlign: 'center',
   },
   playButton: {
     position: 'absolute',

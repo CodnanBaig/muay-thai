@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Alert } from 'react-native';
-import { ComboDetailScreenProps, ComboItem } from '../types';
+import { router } from 'expo-router';
+import { ComboItem } from '../types';
 import { GifPlayer, InstructionList } from '../components/combo';
 import { Button, LoadingSpinner, Card } from '../components/common';
 import { ComboService } from '../services';
 import { useProgress } from '../context';
 import { colors, typography, spacing } from '../utils/constants';
 
+interface ComboDetailScreenProps {
+  comboId: string;
+}
+
 export const ComboDetailScreen: React.FC<ComboDetailScreenProps> = ({ 
-  route, 
-  navigation 
+  comboId
 }) => {
-  const { comboId } = route.params;
   const { updateProgress } = useProgress();
   const [combo, setCombo] = useState<ComboItem | null>(null);
   const [nextCombos, setNextCombos] = useState<ComboItem[]>([]);
@@ -29,7 +32,7 @@ export const ComboDetailScreen: React.FC<ComboDetailScreenProps> = ({
       
       if (!comboDetails) {
         Alert.alert('Error', 'Technique not found');
-        navigation.goBack();
+        router.back();
         return;
       }
 
@@ -61,15 +64,15 @@ export const ComboDetailScreen: React.FC<ComboDetailScreenProps> = ({
         [
           {
             text: 'Continue Training',
-            onPress: () => navigation.goBack(),
+            onPress: () => router.back(),
           },
           {
             text: 'Next Technique',
             onPress: () => {
               if (nextCombos.length > 0) {
-                navigation.replace('ComboDetail', { comboId: nextCombos[0].id });
+                router.replace(`/combo-detail/${nextCombos[0].id}`);
               } else {
-                navigation.goBack();
+                router.back();
               }
             },
           }
@@ -84,7 +87,7 @@ export const ComboDetailScreen: React.FC<ComboDetailScreenProps> = ({
   };
 
   const handleNextCombo = (nextCombo: ComboItem) => {
-    navigation.push('ComboDetail', { comboId: nextCombo.id });
+    router.push(`/combo-detail/${nextCombo.id}`);
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -142,6 +145,7 @@ export const ComboDetailScreen: React.FC<ComboDetailScreenProps> = ({
           <GifPlayer
             gifPath={combo.gifPath}
             comboName={combo.name}
+            category={combo.category}
           />
         </View>
 

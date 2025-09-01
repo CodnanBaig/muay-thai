@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import { CombosScreenProps, ComboItem, ComboCategory, DifficultyLevel } from '../types';
+import { router } from 'expo-router';
+import { ComboItem, ComboCategory, DifficultyLevel } from '../types';
 import { ComboCard } from '../components/combo';
 import { LoadingSpinner } from '../components/common';
 import { ComboService } from '../services';
 import { colors, typography, spacing } from '../utils/constants';
 
-export const CombosScreen: React.FC<CombosScreenProps> = ({ navigation }) => {
+export const CombosScreen: React.FC = () => {
   const [combos, setCombos] = useState<ComboItem[]>([]);
   const [filteredCombos, setFilteredCombos] = useState<ComboItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +45,7 @@ export const CombosScreen: React.FC<CombosScreenProps> = ({ navigation }) => {
   };
 
   const handleComboPress = (combo: ComboItem) => {
-    navigation.navigate('ComboDetail', { comboId: combo.id });
+    router.push(`/combo-detail/${combo.id}`);
   };
 
   const clearFilters = () => {
@@ -112,13 +113,15 @@ export const CombosScreen: React.FC<CombosScreenProps> = ({ navigation }) => {
             selectedCategory === null,
             () => setSelectedCategory(null)
           )}
-          {categories.map((category) =>
-            renderFilterChip(
-              category,
-              selectedCategory === category,
-              () => setSelectedCategory(category === selectedCategory ? null : category)
-            )
-          )}
+          {categories.map((category) => (
+            <React.Fragment key={category}>
+              {renderFilterChip(
+                category,
+                selectedCategory === category,
+                () => setSelectedCategory(category === selectedCategory ? null : category)
+              )}
+            </React.Fragment>
+          ))}
         </View>
 
         <Text style={styles.filterLabel}>Difficulty:</Text>
@@ -128,13 +131,15 @@ export const CombosScreen: React.FC<CombosScreenProps> = ({ navigation }) => {
             selectedDifficulty === null,
             () => setSelectedDifficulty(null)
           )}
-          {difficulties.map((difficulty) =>
-            renderFilterChip(
-              difficulty,
-              selectedDifficulty === difficulty,
-              () => setSelectedDifficulty(difficulty === selectedDifficulty ? null : difficulty)
-            )
-          )}
+          {difficulties.map((difficulty) => (
+            <React.Fragment key={difficulty}>
+              {renderFilterChip(
+                difficulty,
+                selectedDifficulty === difficulty,
+                () => setSelectedDifficulty(difficulty === selectedDifficulty ? null : difficulty)
+              )}
+            </React.Fragment>
+          ))}
         </View>
 
         {(searchQuery || selectedCategory || selectedDifficulty) && (

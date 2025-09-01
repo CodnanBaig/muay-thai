@@ -1,9 +1,9 @@
-import { Audio } from 'expo-av';
+import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import { TimerConfig, TimerState, TimerSession } from '../types';
 import { StorageService } from './StorageService';
 
 export class TimerService {
-  private static sound: Audio.Sound | null = null;
+  private static player: any = null;
   private static isInitialized = false;
 
   // Initialize audio
@@ -11,12 +11,9 @@ export class TimerService {
     if (this.isInitialized) return;
 
     try {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        staysActiveInBackground: false,
-        playsInSilentModeIOS: true,
-        shouldDuckAndroid: true,
-        playThroughEarpieceAndroid: false,
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
       });
       this.isInitialized = true;
     } catch (error) {
@@ -234,22 +231,42 @@ export class TimerService {
         return;
       }
 
-      // Unload previous sound if exists
-      if (this.sound) {
-        await this.sound.unloadAsync();
+      // For web platform, use Web Audio API to generate a bell sound
+      if (typeof window !== 'undefined' && window.AudioContext) {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        
+        // Create a bell-like sound using oscillators
+        const oscillator1 = audioContext.createOscillator();
+        const oscillator2 = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        // Set frequencies for a bell-like sound
+        oscillator1.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator2.frequency.setValueAtTime(1200, audioContext.currentTime);
+        
+        // Connect nodes
+        oscillator1.connect(gainNode);
+        oscillator2.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Set volume and envelope
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+        
+        // Play the sound
+        oscillator1.start(audioContext.currentTime);
+        oscillator2.start(audioContext.currentTime);
+        oscillator1.stop(audioContext.currentTime + 0.8);
+        oscillator2.stop(audioContext.currentTime + 0.8);
+        
+        console.log('🔔 Bell sound played!');
+      } else {
+        // For mobile platforms, you would use expo-audio with an actual sound file
+        // const player = createAudioPlayer(require('../../assets/sounds/bell.mp3'));
+        // await player.play();
+        console.log('🔔 Bell sound played! (Mobile platform)');
       }
-
-      // Note: In a real app, you would load the actual bell.mp3 file
-      // For now, we'll use a placeholder approach
-      // const { sound } = await Audio.Sound.createAsync(
-      //   require('../assets/sounds/bell.mp3')
-      // );
       
-      // For demonstration, we'll log instead of playing actual sound
-      console.log('🔔 Bell sound played!');
-      
-      // this.sound = sound;
-      // await sound.playAsync();
     } catch (error) {
       console.error('Error playing bell sound:', error);
     }
@@ -288,9 +305,9 @@ export class TimerService {
   // Clean up resources
   static async cleanup(): Promise<void> {
     try {
-      if (this.sound) {
-        await this.sound.unloadAsync();
-        this.sound = null;
+      if (this.player) {
+        await this.player.remove();
+        this.player = null;
       }
     } catch (error) {
       console.error('Error cleaning up timer service:', error);

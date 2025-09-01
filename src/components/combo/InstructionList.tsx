@@ -66,7 +66,7 @@ export const InstructionList: React.FC<InstructionListProps> = ({
     }
 
     return content.map((item, index) => (
-      <View key={index} style={styles.listItem}>
+      <View key={`${activeTab}-${index}-${item.slice(0, 10)}`} style={styles.listItem}>
         <View style={styles.bullet}>
           <Text style={styles.bulletText}>
             {activeTab === 'instructions' ? (index + 1).toString() : '•'}
